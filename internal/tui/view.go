@@ -156,7 +156,7 @@ func (m *Model) composeView() []string {
 		return col[:min(len(col), bh)]
 	}
 	rw := m.w - left - 1
-	xh := bh / 2
+	xh := m.xHeight(p, text, rw-4, bh)
 	xbox := strings.Split(m.st.Box(rw, xh, "X", m.xPreview(p, text, rw-4, xh-2), false, ""), "\n")
 	lbox := strings.Split(m.st.Box(rw, bh-xh, "LinkedIn", m.linkedInPreview(p, text, rw-4, bh-xh-2), false, ""), "\n")
 	right := append(xbox, lbox...)
@@ -172,6 +172,18 @@ func (m *Model) composeView() []string {
 		out[i] = ui.Fit(l, left) + " " + r
 	}
 	return out
+}
+
+// xHeight splits the previews' column: X gets what its post (a thread
+// can be long) needs, LinkedIn the rest, each at least a third.
+func (m *Model) xHeight(p post.Post, text string, w, bh int) int {
+	lines := m.xPreview(p, text, w, 1000) // unclipped: content, padding, then the meter
+	need := len(lines)
+	for need > 2 && lines[need-2] == "" {
+		lines = append(lines[:need-2], lines[need-1])
+		need--
+	}
+	return max(bh/3, min(need+2, bh-bh/3))
 }
 
 func (m *Model) settingsLines(p post.Post) []string {

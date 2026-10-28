@@ -2,6 +2,12 @@
 
 Newest first. Releases are tags (`vX.Y.Z`) with `Version` in internal/app/app.go.
 
+## v0.1.1 -- 2026-10-28
+
+- The previews share their column by what they hold: a long X thread gets
+  the room it needs (up to two thirds), so its last part is no longer cut
+  off while LinkedIn's box stood half empty.
+
 ## v0.1.0 -- 2026-10-28
 
 - First release: write once, post to X and LinkedIn from the terminal.
