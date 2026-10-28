@@ -1,0 +1,8 @@
+# The project website (docs/, GitHub Pages): built by scripts/build-site.py
+name = "prasar"
+sanskrit = "प्रसार"
+meaning = "broadcast"
+tagline = "Write once, post to X and LinkedIn from the terminal: a live preview of each, drafts, a schedule, and an agent that drafts for you. Free."
+color = "peach"
+kind = "posting"
+logo = "assets/logo.svg"

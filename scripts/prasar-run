@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Runs prasar for the tmux plugin: the one on PATH, else the copy built in
+# this plugin's folder (bin/prasar), building it with Go the first time.
+dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+# tmux's environment often lacks ~/.local/bin and ~/go/bin: look there too
+for bin in "$(command -v prasar 2>/dev/null)" "$HOME/.local/bin/prasar" "${GOBIN:-$HOME/go/bin}/prasar"; do
+  if [ -n "$bin" ] && [ -x "$bin" ]; then exec "$bin" "$@"; fi
+done
+# the copy built here: rebuilt whenever the plugin's code is newer (TPM update)
+stale() { [ ! -x "$dir/bin/prasar" ] || [ -n "$(find "$dir/cmd" "$dir/internal" "$dir/go.mod" -newer "$dir/bin/prasar" -print -quit 2>/dev/null)" ]; }
+if stale; then
+  if command -v go >/dev/null 2>&1; then
+    echo "Building prasar..."
+    (cd "$dir" && go build -trimpath -o bin/prasar ./cmd/prasar) || { echo "Build failed."; read -rn1; exit 1; }
+  else
+    echo "prasar isn't installed: see https://github.com/Theyashsawarkar/prasar#install"
+    echo "(press a key)"; read -rn1; exit 1
+  fi
+fi
+exec "$dir/bin/prasar" "$@"

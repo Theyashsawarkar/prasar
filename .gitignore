@@ -1,0 +1,13 @@
+/bin/
+/prasar
+/dist/
+# never commit credentials or mail: OAuth clients, tokens, local copies
+client.json
+client_secret*.json
+*.token
+tokens/
+*.db
+*.db-wal
+*.db-shm
+.env
+.env.*
